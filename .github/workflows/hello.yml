@@ -1,0 +1,14 @@
+name: Hola Mundo!
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Di hola
+        run: |
+          echo "Hola Mundo!"
