@@ -17,3 +17,7 @@ jobs:
         run: npm install
       - name: Comprobar estilo
         run: npm run eslint
+      - name: Comprobar build
+        run: npm run build
+      - name: Comprobar tests
+        run: npm run test
