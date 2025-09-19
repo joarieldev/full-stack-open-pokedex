@@ -12,3 +12,9 @@ jobs:
       - name: Di hola
         run: |
           echo "Hola Mundo!"
+      - name: Hoy es
+        run: |
+          date
+      - name: Contenido del directorio
+        run: |
+          ls -l
