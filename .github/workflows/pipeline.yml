@@ -35,3 +35,10 @@ jobs:
       - name: Comprobar e2e tests
         run: npm run test
         working-directory: ./e2e-tests
+
+      - name: Deploy
+        if: github.ref == 'refs/heads/main'
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: | 
+          curl "$deploy_url"
