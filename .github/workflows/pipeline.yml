@@ -46,7 +46,38 @@ jobs:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: | 
           curl "$deploy_url"
-  
+
+  discord_notify:
+      needs: [simple_deployment_pipeline]
+      runs-on: ubuntu-latest
+      if: always()
+      steps:
+        - name: Notify Discord of Success
+          if: ${{ needs.simple_deployment_pipeline.result == 'success' }}
+          uses: rjstone/discord-webhook-notify@v2
+          with:
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            username: GitHub
+            avatarUrl: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+            severity: info
+            color: '#00ff00'
+            title: "A new version of Pokedex deployed"
+            description: "commit ${{ github.sha }} by ${{ github.actor }}"
+            footer: "Severity: Informational • ${{ github.event.head_commit.timestamp }}"
+
+        - name: Notify Discord of Failure
+          if: ${{ needs.simple_deployment_pipeline.result == 'failure' }}
+          uses: rjstone/discord-webhook-notify@v2
+          with:
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            username: GitHub
+            avatarUrl: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+            severity: error
+            color: '#ff0000'
+            title: "Build failed"
+            description: "commit ${{ github.sha }} by ${{ github.actor }} broke the build :("
+            footer: "Severity: Error • ${{ github.event.head_commit.timestamp }}"
+
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-latest
